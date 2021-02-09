@@ -1,46 +1,33 @@
 import { connect } from "react-redux";
 
 const Rank = ({ words }) => {
-  let maxCounter = 0;
-  for (let key in words) {
-    if (maxCounter < words[key]) {
-      maxCounter = words[key];
+  words.sort((a, b) => {
+    if (a.rating < b.rating) {
+      return 1;
     }
-  }
+    if (a.rating > b.rating) {
+      return -1;
+    }
+    return 0;
+  });
 
-  const groups = [100, 75, 50, 25, 0];
-  const result = [];
-  for (let key in words) {
-    const wordPercantage = Math.ceil((words[key] * 100) / maxCounter);
-    for (let i = 0; i < groups.length; i++) {
-      if (wordPercantage >= groups[i]) {
-        if (result[i] == null) {
-          result[i] = [key];
-        } else {
-          result[i].push(key);
-        }
-        break;
-      }
+  const repeatText = (text, times = 0) => {
+    let result = "";
+    while (times) {
+      result += text;
+      times--;
     }
-  }
+    return result;
+  };
 
   return (
-    <ul>
-      {result.map((words, i) =>
-        words.map((word, j) => (
-          <li key={j}>
-            {word} -{" "}
-            <strong>
-              (
-              {Array(result.length - i)
-                .fill("*")
-                .join("")}
-              )
-            </strong>
-          </li>
-        ))
-      )}
-    </ul>
+    <div>
+      {words.map(({ word, rating }) => (
+        <div>
+          {word} - <strong>({repeatText("*", rating)})</strong>
+        </div>
+      ))}
+    </div>
   );
 };
 
