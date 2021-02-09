@@ -1,7 +1,15 @@
 const express = require("express");
-const { pipe, strip, wordsScore } = require("../common/utils");
+const {
+  pipe,
+  strip,
+  wordsScore,
+  wordsRating,
+  curry,
+} = require("../common/utils");
 const { getTopicByTitle } = require("../services/topics");
 const router = express.Router();
+
+const RATING_STEP = 20;
 
 router.get("/ranked", async (req, res) => {
   const topic = await getTopicByTitle(req.query.term);
@@ -10,9 +18,12 @@ router.get("/ranked", async (req, res) => {
     return;
   }
 
-  const score = pipe(strip, wordsScore)(topic.extract);
-
-  res.json(score);
+  const result = pipe(
+    strip,
+    wordsScore,
+    curry(wordsRating)(RATING_STEP)
+  )(topic.extract);
+  res.json(result);
 });
 
 module.exports = router;
