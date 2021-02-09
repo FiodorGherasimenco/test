@@ -1,6 +1,5 @@
 const express = require("express");
 const { pipe, strip, wordСounter } = require("../common/utils");
-
 const { getTopicByTitle } = require("../services/topics");
 const router = express.Router();
 
