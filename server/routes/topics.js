@@ -1,5 +1,5 @@
 const express = require("express");
-const { pipe, strip, wordСounter } = require("../common/utils");
+const { pipe, strip, wordsScore } = require("../common/utils");
 const { getTopicByTitle } = require("../services/topics");
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.get("/ranked", async (req, res) => {
     return;
   }
 
-  const score = pipe(strip, wordСounter)(topic.extract);
+  const score = pipe(strip, wordsScore)(topic.extract);
 
   res.json(score);
 });
