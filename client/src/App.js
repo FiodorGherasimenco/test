@@ -1,7 +1,14 @@
 import "./App.css";
+import Rank from "./containers/Rank";
+import Search from "./containers/Search";
 
 function App() {
-  return <div>OK</div>;
+  return (
+    <div>
+      <Search />
+      <Rank />
+    </div>
+  );
 }
 
 export default App;
