@@ -6,27 +6,27 @@ const pipe = (...fns) => {
   return (arg) => fns.reduce((prev, fn) => fn(prev), arg);
 };
 
-const wordСounter = (text) => {
+const wordsScore = (text) => {
   text = String(text);
   text = text.replace(/[\n\t]/g, "");
   text = text.replace(/[()\[\];:"',.]/g, "");
   text = text.toLowerCase();
 
   const words = text.split(/\s+/).filter(Boolean);
-  const score = {};
+  const result = {};
   for (let i = 0; i < words.length; i++) {
-    if (score[words[i]] == null) {
-      score[words[i]] = 1;
+    if (result[words[i]] == null) {
+      result[words[i]] = 1;
     } else {
-      score[words[i]] += 1;
+      result[words[i]] += 1;
     }
   }
 
-  return score;
+  return result;
 };
 
 module.exports = {
   pipe,
   strip,
-  wordСounter,
+  wordsScore,
 };
