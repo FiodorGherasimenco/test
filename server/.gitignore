@@ -1,0 +1,7 @@
+.vscode
+~*
+*.local
+
+dist/
+debug/
+node_modules/
