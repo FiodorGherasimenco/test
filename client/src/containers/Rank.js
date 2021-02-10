@@ -1,6 +1,11 @@
 import { connect } from "react-redux";
 
 const Rank = ({ words }) => {
+
+  if(words == null){
+    return <div>Nothing to show</div>
+  }
+
   words.sort((a, b) => {
     if (a.rating < b.rating) {
       return 1;
