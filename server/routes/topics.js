@@ -13,11 +13,10 @@ const RATING_STEP = 20;
 
 router.get("/ranked", async (req, res) => {
   const topic = await getTopicByTitle(req.query.term);
-  if (topic == null) {
-    res.json({});
-    return;
-  }
-
+  // if (topic == null) {
+  //   res.json({});
+  //   return;
+  // }
   const result = pipe(
     strip,
     wordsScore,

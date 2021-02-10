@@ -44,7 +44,7 @@ const getMaxWordCounter = (wordsScore) => {
   return maxCounter;
 };
 
-const wordsRating = (groupStep, wordsScore) => {
+const wordsRating = (groupStep,  wordsScore) => {
   const maxWordScore = getMaxWordCounter(wordsScore);
   const totalGroupsCount = 100 / groupStep;
   const result = [];
