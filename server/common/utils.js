@@ -1,6 +1,4 @@
-const { htmlToText } = require("html-to-text");
-
-const strip = (text) => htmlToText(text);
+const stripTags = (text) => String(text).replace(/<[^>]+>/g, "");
 
 const pipe = (...fns) => {
   return (arg) => fns.reduce((prev, fn) => fn(prev), arg);
@@ -14,10 +12,12 @@ const curry = (fn, opt_context) =>
     return (...rest) => curried.apply(this, args.concat(rest));
   };
 
-const wordsScore = (text) => {
+const getWordsScore = (text) => {
   text = String(text);
   text = text.replace(/[\n\t]/g, "");
-  text = text.replace(/[()\[\];:"',.]/g, "");
+  text = text.replace(/[\[\]\(\)]/g, "");
+  text = text.replace(/[:;,."]/g, "");
+  text = text.replace(/\'+\s/g, " ");
   text = text.toLowerCase();
 
   const words = text.split(/\s+/).filter(Boolean);
@@ -33,7 +33,7 @@ const wordsScore = (text) => {
   return result;
 };
 
-const getMaxWordCounter = (wordsScore) => {
+const getMaxWordScore = (wordsScore) => {
   let maxCounter = 0;
   for (let key in wordsScore) {
     if (maxCounter < wordsScore[key]) {
@@ -44,22 +44,16 @@ const getMaxWordCounter = (wordsScore) => {
   return maxCounter;
 };
 
-const wordsRating = (groupStep,  wordsScore) => {
-  const maxWordScore = getMaxWordCounter(wordsScore);
-  const totalGroupsCount = 100 / groupStep;
+const wordsRating = (wordsScore, maxWordScore, rating) => {
+  const ratingStep = 100 / rating;
   const result = [];
   for (let key in wordsScore) {
-    const wordPercentage = Math.ceil((wordsScore[key] * 100) / maxWordScore);
-    let groupIndex = 0;
-    for (let i = 0; i < totalGroupsCount; i++) {
-      if (wordPercentage >= i * groupStep) {
-        groupIndex = i;
-      }
-    }
+    const percentage = wordsScore[key] * 100 / maxWordScore;
+    const rate = Math.ceil(percentage / ratingStep);
     result.push({
       word: key,
       score: wordsScore[key],
-      rating: groupIndex + 1,
+      rating: rate,
     });
   }
 
@@ -69,7 +63,8 @@ const wordsRating = (groupStep,  wordsScore) => {
 module.exports = {
   pipe,
   curry,
-  strip,
-  wordsScore,
+  stripTags,
+  getWordsScore,
+  getMaxWordScore,
   wordsRating,
 };
